@@ -15,7 +15,6 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   car: (where?: CarWhereInput) => Promise<boolean>;
-  vehicleDetail: (where?: VehicleDetailWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -60,28 +59,6 @@ export interface Prisma {
       last?: Int;
     }
   ) => CarConnectionPromise;
-  vehicleDetails: (
-    args?: {
-      where?: VehicleDetailWhereInput;
-      orderBy?: VehicleDetailOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<VehicleDetail>;
-  vehicleDetailsConnection: (
-    args?: {
-      where?: VehicleDetailWhereInput;
-      orderBy?: VehicleDetailOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => VehicleDetailConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -104,16 +81,6 @@ export interface Prisma {
   ) => CarPromise;
   deleteCar: (where: CarWhereUniqueInput) => CarPromise;
   deleteManyCars: (where?: CarWhereInput) => BatchPayloadPromise;
-  createVehicleDetail: (data: VehicleDetailCreateInput) => VehicleDetailPromise;
-  updateManyVehicleDetails: (
-    args: {
-      data: VehicleDetailUpdateManyMutationInput;
-      where?: VehicleDetailWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  deleteManyVehicleDetails: (
-    where?: VehicleDetailWhereInput
-  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -126,9 +93,6 @@ export interface Subscription {
   car: (
     where?: CarSubscriptionWhereInput
   ) => CarSubscriptionPayloadSubscription;
-  vehicleDetail: (
-    where?: VehicleDetailSubscriptionWhereInput
-  ) => VehicleDetailSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -139,7 +103,11 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type VehicleDetailOrderByInput =
+export type CarOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
   | "vin_ASC"
   | "vin_DESC"
   | "make_ASC"
@@ -148,8 +116,6 @@ export type VehicleDetailOrderByInput =
   | "model_DESC"
   | "year_ASC"
   | "year_DESC"
-  | "id_ASC"
-  | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -157,39 +123,16 @@ export type VehicleDetailOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type CarOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "title_ASC"
-  | "title_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export interface CarCreateInput {
   title: String;
-  info: VehicleDetailCreateOneInput;
-}
-
-export interface VehicleDetailUpdateDataInput {
   vin?: String;
   make?: String;
   model?: String;
   year?: Int;
 }
 
-export type CarWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface VehicleDetailUpdateOneRequiredInput {
-  create?: VehicleDetailCreateInput;
-  update?: VehicleDetailUpdateDataInput;
-  upsert?: VehicleDetailUpsertNestedInput;
-}
-
-export interface VehicleDetailUpdateManyMutationInput {
+export interface CarUpdateInput {
+  title?: String;
   vin?: String;
   make?: String;
   model?: String;
@@ -211,14 +154,6 @@ export interface CarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
   title?: String;
   title_not?: String;
   title_in?: String[] | String;
@@ -233,40 +168,6 @@ export interface CarWhereInput {
   title_not_starts_with?: String;
   title_ends_with?: String;
   title_not_ends_with?: String;
-  info?: VehicleDetailWhereInput;
-  AND?: CarWhereInput[] | CarWhereInput;
-  OR?: CarWhereInput[] | CarWhereInput;
-  NOT?: CarWhereInput[] | CarWhereInput;
-}
-
-export interface VehicleDetailCreateOneInput {
-  create?: VehicleDetailCreateInput;
-}
-
-export interface CarSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CarWhereInput;
-  AND?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
-  OR?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
-  NOT?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
-}
-
-export interface VehicleDetailCreateInput {
-  vin: String;
-  make: String;
-  model: String;
-  year: Int;
-}
-
-export interface CarUpdateInput {
-  title?: String;
-  info?: VehicleDetailUpdateOneRequiredInput;
-}
-
-export interface VehicleDetailWhereInput {
   vin?: String;
   vin_not?: String;
   vin_in?: String[] | String;
@@ -317,39 +218,52 @@ export interface VehicleDetailWhereInput {
   year_lte?: Int;
   year_gt?: Int;
   year_gte?: Int;
-  AND?: VehicleDetailWhereInput[] | VehicleDetailWhereInput;
-  OR?: VehicleDetailWhereInput[] | VehicleDetailWhereInput;
-  NOT?: VehicleDetailWhereInput[] | VehicleDetailWhereInput;
+  AND?: CarWhereInput[] | CarWhereInput;
+  OR?: CarWhereInput[] | CarWhereInput;
+  NOT?: CarWhereInput[] | CarWhereInput;
 }
 
 export interface CarUpdateManyMutationInput {
   title?: String;
+  vin?: String;
+  make?: String;
+  model?: String;
+  year?: Int;
 }
 
-export interface VehicleDetailUpsertNestedInput {
-  update: VehicleDetailUpdateDataInput;
-  create: VehicleDetailCreateInput;
-}
-
-export interface VehicleDetailSubscriptionWhereInput {
+export interface CarSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: VehicleDetailWhereInput;
-  AND?:
-    | VehicleDetailSubscriptionWhereInput[]
-    | VehicleDetailSubscriptionWhereInput;
-  OR?:
-    | VehicleDetailSubscriptionWhereInput[]
-    | VehicleDetailSubscriptionWhereInput;
-  NOT?:
-    | VehicleDetailSubscriptionWhereInput[]
-    | VehicleDetailSubscriptionWhereInput;
+  node?: CarWhereInput;
+  AND?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
+  OR?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
+  NOT?: CarSubscriptionWhereInput[] | CarSubscriptionWhereInput;
 }
+
+export type CarWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface NodeNode {
   id: ID_Output;
+}
+
+export interface AggregateCar {
+  count: Int;
+}
+
+export interface AggregateCarPromise
+  extends Promise<AggregateCar>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCarSubscription
+  extends Promise<AsyncIterator<AggregateCar>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface BatchPayload {
@@ -368,105 +282,52 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface VehicleDetailPreviousValues {
-  vin: String;
-  make: String;
-  model: String;
-  year: Int;
+export interface CarPreviousValues {
+  id: ID_Output;
+  title: String;
+  vin?: String;
+  make?: String;
+  model?: String;
+  year?: Int;
 }
 
-export interface VehicleDetailPreviousValuesPromise
-  extends Promise<VehicleDetailPreviousValues>,
+export interface CarPreviousValuesPromise
+  extends Promise<CarPreviousValues>,
     Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   vin: () => Promise<String>;
   make: () => Promise<String>;
   model: () => Promise<String>;
   year: () => Promise<Int>;
 }
 
-export interface VehicleDetailPreviousValuesSubscription
-  extends Promise<AsyncIterator<VehicleDetailPreviousValues>>,
+export interface CarPreviousValuesSubscription
+  extends Promise<AsyncIterator<CarPreviousValues>>,
     Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   vin: () => Promise<AsyncIterator<String>>;
   make: () => Promise<AsyncIterator<String>>;
   model: () => Promise<AsyncIterator<String>>;
   year: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface AggregateVehicleDetail {
-  count: Int;
-}
-
-export interface AggregateVehicleDetailPromise
-  extends Promise<AggregateVehicleDetail>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateVehicleDetailSubscription
-  extends Promise<AsyncIterator<AggregateVehicleDetail>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface VehicleDetailEdge {
-  node: VehicleDetail;
+export interface CarEdge {
+  node: Car;
   cursor: String;
 }
 
-export interface VehicleDetailEdgePromise
-  extends Promise<VehicleDetailEdge>,
-    Fragmentable {
-  node: <T = VehicleDetailPromise>() => T;
+export interface CarEdgePromise extends Promise<CarEdge>, Fragmentable {
+  node: <T = CarPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface VehicleDetailEdgeSubscription
-  extends Promise<AsyncIterator<VehicleDetailEdge>>,
+export interface CarEdgeSubscription
+  extends Promise<AsyncIterator<CarEdge>>,
     Fragmentable {
-  node: <T = VehicleDetailSubscription>() => T;
+  node: <T = CarSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface VehicleDetail {
-  vin: String;
-  make: String;
-  model: String;
-  year: Int;
-}
-
-export interface VehicleDetailPromise
-  extends Promise<VehicleDetail>,
-    Fragmentable {
-  vin: () => Promise<String>;
-  make: () => Promise<String>;
-  model: () => Promise<String>;
-  year: () => Promise<Int>;
-}
-
-export interface VehicleDetailSubscription
-  extends Promise<AsyncIterator<VehicleDetail>>,
-    Fragmentable {
-  vin: () => Promise<AsyncIterator<String>>;
-  make: () => Promise<AsyncIterator<String>>;
-  model: () => Promise<AsyncIterator<String>>;
-  year: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateCar {
-  count: Int;
-}
-
-export interface AggregateCarPromise
-  extends Promise<AggregateCar>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCarSubscription
-  extends Promise<AsyncIterator<AggregateCar>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CarSubscriptionPayload {
@@ -494,26 +355,54 @@ export interface CarSubscriptionPayloadSubscription
   previousValues: <T = CarPreviousValuesSubscription>() => T;
 }
 
-export interface CarPreviousValues {
+export interface Car {
   id: ID_Output;
-  createdAt: DateTimeOutput;
   title: String;
+  vin?: String;
+  make?: String;
+  model?: String;
+  year?: Int;
 }
 
-export interface CarPreviousValuesPromise
-  extends Promise<CarPreviousValues>,
-    Fragmentable {
+export interface CarPromise extends Promise<Car>, Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
   title: () => Promise<String>;
+  vin: () => Promise<String>;
+  make: () => Promise<String>;
+  model: () => Promise<String>;
+  year: () => Promise<Int>;
 }
 
-export interface CarPreviousValuesSubscription
-  extends Promise<AsyncIterator<CarPreviousValues>>,
+export interface CarSubscription
+  extends Promise<AsyncIterator<Car>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   title: () => Promise<AsyncIterator<String>>;
+  vin: () => Promise<AsyncIterator<String>>;
+  make: () => Promise<AsyncIterator<String>>;
+  model: () => Promise<AsyncIterator<String>>;
+  year: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CarConnection {
+  pageInfo: PageInfo;
+  edges: CarEdge[];
+}
+
+export interface CarConnectionPromise
+  extends Promise<CarConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CarEdge>>() => T;
+  aggregate: <T = AggregateCarPromise>() => T;
+}
+
+export interface CarConnectionSubscription
+  extends Promise<AsyncIterator<CarConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CarEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCarSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -539,112 +428,6 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface CarEdge {
-  node: Car;
-  cursor: String;
-}
-
-export interface CarEdgePromise extends Promise<CarEdge>, Fragmentable {
-  node: <T = CarPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CarEdgeSubscription
-  extends Promise<AsyncIterator<CarEdge>>,
-    Fragmentable {
-  node: <T = CarSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface VehicleDetailConnection {
-  pageInfo: PageInfo;
-  edges: VehicleDetailEdge[];
-}
-
-export interface VehicleDetailConnectionPromise
-  extends Promise<VehicleDetailConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<VehicleDetailEdge>>() => T;
-  aggregate: <T = AggregateVehicleDetailPromise>() => T;
-}
-
-export interface VehicleDetailConnectionSubscription
-  extends Promise<AsyncIterator<VehicleDetailConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<VehicleDetailEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateVehicleDetailSubscription>() => T;
-}
-
-export interface Car {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  title: String;
-}
-
-export interface CarPromise extends Promise<Car>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  title: () => Promise<String>;
-  info: <T = VehicleDetailPromise>() => T;
-}
-
-export interface CarSubscription
-  extends Promise<AsyncIterator<Car>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  title: () => Promise<AsyncIterator<String>>;
-  info: <T = VehicleDetailSubscription>() => T;
-}
-
-export interface VehicleDetailSubscriptionPayload {
-  mutation: MutationType;
-  node: VehicleDetail;
-  updatedFields: String[];
-  previousValues: VehicleDetailPreviousValues;
-}
-
-export interface VehicleDetailSubscriptionPayloadPromise
-  extends Promise<VehicleDetailSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = VehicleDetailPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = VehicleDetailPreviousValuesPromise>() => T;
-}
-
-export interface VehicleDetailSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<VehicleDetailSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = VehicleDetailSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = VehicleDetailPreviousValuesSubscription>() => T;
-}
-
-export interface CarConnection {
-  pageInfo: PageInfo;
-  edges: CarEdge[];
-}
-
-export interface CarConnectionPromise
-  extends Promise<CarConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CarEdge>>() => T;
-  aggregate: <T = AggregateCarPromise>() => T;
-}
-
-export interface CarConnectionSubscription
-  extends Promise<AsyncIterator<CarConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CarEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCarSubscription>() => T;
-}
-
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
@@ -653,9 +436,10 @@ export type String = string;
 export type Long = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
-export type Boolean = boolean;
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -663,20 +447,9 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 export type Int = number;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `Boolean` scalar type represents `true` or `false`.
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
-
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
+export type Boolean = boolean;
 
 /**
  * Model Metadata
@@ -685,10 +458,6 @@ export type DateTimeOutput = string;
 export const models: Model[] = [
   {
     name: "Car",
-    embedded: false
-  },
-  {
-    name: "VehicleDetail",
     embedded: false
   }
 ];

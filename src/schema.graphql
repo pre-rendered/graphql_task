@@ -1,30 +1,32 @@
 type Query {
-  cars: [Car]!,
-  car(id: Int!): Car,
+  cars: [Car]!
+  car(id: ID!): Car!
 }
 
 type Mutation {
-  post(title: String!, info: VehicleDetailInput!): Car!
-  deleteCar(id: Int!): Int!
-  updateCar(id: Int!, title: String!, info: VehicleDetailInput): Car!
+  createCar(
+    title: String!,
+    vin: String,
+    make: String,
+    model: String,
+    year: Int
+  ): Car!
+  deleteCar(id: ID!): Car
+  updateCar(
+    id: ID!,
+    title: String,
+    vin: String,
+    make: String,
+    model: String,
+    year: Int
+  ): Car
 }
 
 type Car {
-  id: Int!,
-  title: String!,
-  info: VehicleDetail!,
-}
-
-type VehicleDetail {
-  vin: String!,
-  make: String!,
-  model: String!,
-  year: Int!,
-}
-
-input VehicleDetailInput {
-  vin: String!,
-  make: String!,
-  model: String!,
-  year: Int!,
+  id: ID!
+  title: String!
+  vin: String
+  make: String
+  model: String
+  year: Int
 }

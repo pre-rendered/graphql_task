@@ -1,7 +1,7 @@
 #endpoint: ''
 endpoint: https://us1.prisma.sh/ryan-chua-e9260a/prisma/dev
 
-datamodel: datamodel.prisma
+datamodel: datamodel.graphql
 
 generate:
   - generator: javascript-client
