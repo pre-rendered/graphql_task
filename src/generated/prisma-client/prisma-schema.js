@@ -14,6 +14,7 @@ type Car {
   make: String
   model: String
   year: Int
+  createdAt: DateTime!
 }
 
 type CarConnection {
@@ -61,6 +62,7 @@ type CarPreviousValues {
   make: String
   model: String
   year: Int
+  createdAt: DateTime!
 }
 
 type CarSubscriptionPayload {
@@ -176,6 +178,14 @@ input CarWhereInput {
   year_lte: Int
   year_gt: Int
   year_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   AND: [CarWhereInput!]
   OR: [CarWhereInput!]
   NOT: [CarWhereInput!]
@@ -184,6 +194,8 @@ input CarWhereInput {
 input CarWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 scalar Long
 

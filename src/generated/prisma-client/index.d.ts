@@ -131,14 +131,6 @@ export interface CarCreateInput {
   year?: Int;
 }
 
-export interface CarUpdateInput {
-  title?: String;
-  vin?: String;
-  make?: String;
-  model?: String;
-  year?: Int;
-}
-
 export interface CarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
@@ -218,9 +210,25 @@ export interface CarWhereInput {
   year_lte?: Int;
   year_gt?: Int;
   year_gte?: Int;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
   AND?: CarWhereInput[] | CarWhereInput;
   OR?: CarWhereInput[] | CarWhereInput;
   NOT?: CarWhereInput[] | CarWhereInput;
+}
+
+export interface CarUpdateInput {
+  title?: String;
+  vin?: String;
+  make?: String;
+  model?: String;
+  year?: Int;
 }
 
 export interface CarUpdateManyMutationInput {
@@ -250,20 +258,21 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface AggregateCar {
-  count: Int;
+export interface CarEdge {
+  node: Car;
+  cursor: String;
 }
 
-export interface AggregateCarPromise
-  extends Promise<AggregateCar>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface CarEdgePromise extends Promise<CarEdge>, Fragmentable {
+  node: <T = CarPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateCarSubscription
-  extends Promise<AsyncIterator<AggregateCar>>,
+export interface CarEdgeSubscription
+  extends Promise<AsyncIterator<CarEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = CarSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BatchPayload {
@@ -282,28 +291,28 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface CarPreviousValues {
+export interface Car {
   id: ID_Output;
   title: String;
   vin?: String;
   make?: String;
   model?: String;
   year?: Int;
+  createdAt: DateTimeOutput;
 }
 
-export interface CarPreviousValuesPromise
-  extends Promise<CarPreviousValues>,
-    Fragmentable {
+export interface CarPromise extends Promise<Car>, Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
   vin: () => Promise<String>;
   make: () => Promise<String>;
   model: () => Promise<String>;
   year: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface CarPreviousValuesSubscription
-  extends Promise<AsyncIterator<CarPreviousValues>>,
+export interface CarSubscription
+  extends Promise<AsyncIterator<Car>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
@@ -311,23 +320,7 @@ export interface CarPreviousValuesSubscription
   make: () => Promise<AsyncIterator<String>>;
   model: () => Promise<AsyncIterator<String>>;
   year: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CarEdge {
-  node: Car;
-  cursor: String;
-}
-
-export interface CarEdgePromise extends Promise<CarEdge>, Fragmentable {
-  node: <T = CarPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CarEdgeSubscription
-  extends Promise<AsyncIterator<CarEdge>>,
-    Fragmentable {
-  node: <T = CarSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface CarSubscriptionPayload {
@@ -353,35 +346,6 @@ export interface CarSubscriptionPayloadSubscription
   node: <T = CarSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = CarPreviousValuesSubscription>() => T;
-}
-
-export interface Car {
-  id: ID_Output;
-  title: String;
-  vin?: String;
-  make?: String;
-  model?: String;
-  year?: Int;
-}
-
-export interface CarPromise extends Promise<Car>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  vin: () => Promise<String>;
-  make: () => Promise<String>;
-  model: () => Promise<String>;
-  year: () => Promise<Int>;
-}
-
-export interface CarSubscription
-  extends Promise<AsyncIterator<Car>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  title: () => Promise<AsyncIterator<String>>;
-  vin: () => Promise<AsyncIterator<String>>;
-  make: () => Promise<AsyncIterator<String>>;
-  model: () => Promise<AsyncIterator<String>>;
-  year: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CarConnection {
@@ -428,18 +392,55 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export interface AggregateCar {
+  count: Int;
+}
 
-export type Long = string;
+export interface AggregateCarPromise
+  extends Promise<AggregateCar>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
 
-/*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
-*/
-export type ID_Input = string | number;
-export type ID_Output = string;
+export interface AggregateCarSubscription
+  extends Promise<AsyncIterator<AggregateCar>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CarPreviousValues {
+  id: ID_Output;
+  title: String;
+  vin?: String;
+  make?: String;
+  model?: String;
+  year?: Int;
+  createdAt: DateTimeOutput;
+}
+
+export interface CarPreviousValuesPromise
+  extends Promise<CarPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  vin: () => Promise<String>;
+  make: () => Promise<String>;
+  model: () => Promise<String>;
+  year: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CarPreviousValuesSubscription
+  extends Promise<AsyncIterator<CarPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  vin: () => Promise<AsyncIterator<String>>;
+  make: () => Promise<AsyncIterator<String>>;
+  model: () => Promise<AsyncIterator<String>>;
+  year: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -450,6 +451,29 @@ export type Int = number;
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+/*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number;
+export type ID_Output = string;
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
+
+export type Long = string;
 
 /**
  * Model Metadata
