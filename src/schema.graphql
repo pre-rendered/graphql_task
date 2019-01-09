@@ -1,28 +1,28 @@
 type Query {
-  cars: [Vehicle]!,
-  vehicle(id: Int!): Vehicle,
+  cars: [Car]!,
+  car(id: Int!): Car,
 }
 
 type Mutation {
-  post(title: String!, info: DetailInput!): Vehicle!
-  deleteVehicle(id: Int!): Int!
-  updateVehicle(id: Int!, title: String!, info: DetailInput): Vehicle!
+  post(title: String!, info: VehicleDetailInput!): Car!
+  deleteCar(id: Int!): Int!
+  updateCar(id: Int!, title: String!, info: VehicleDetailInput): Car!
 }
 
-type Vehicle {
+type Car {
   id: Int!,
   title: String!,
-  info: Detail!,
+  info: VehicleDetail!,
 }
 
-type Detail {
+type VehicleDetail {
   vin: String!,
   make: String!,
   model: String!,
   year: Int!,
 }
 
-input DetailInput {
+input VehicleDetailInput {
   vin: String!,
   make: String!,
   model: String!,

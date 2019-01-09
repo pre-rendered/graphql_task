@@ -15,7 +15,7 @@ let luigiDetail = {
   year: 2019,
 }
 
-let vehicles = [
+let cars = [
   {
     id: 1,
     title: 'Mario\'s Kart',
@@ -28,41 +28,41 @@ let vehicles = [
   }
 ];
 
-let idCount = vehicles.length;
+let idCount = cars.length;
 
 const resolvers = {
   Query: {
-    cars: () => vehicles,
-    vehicle: (_parent, args) => {
-      return find(vehicles, { id: args.id });
+    cars: () => cars,
+    car: (_parent, args) => {
+      return find(cars, { id: args.id });
     }
   },
   Mutation: {
     post: (_parent, args) => {
-      const vehicle = {
+      const car = {
         id: ++idCount,
         title: args.title,
         info: args.info,
       }
-      vehicles.push(vehicle);
-      return vehicle;
+      cars.push(car);
+      return car;
     },
-    deleteVehicle: (_parent, args) => {
-      const vehicleIndex = vehicles.map(vehicle => vehicle.id).indexOf(args.id);
-      if (vehicleIndex < 0) {
+    deleteCar: (_parent, args) => {
+      const carIndex = cars.map(car => car.id).indexOf(args.id);
+      if (carIndex < 0) {
         return 404;
       }
-      vehicles.splice(vehicleIndex, 1);
+      cars.splice(carIndex, 1);
       return 200;
     },
-    updateVehicle: (parent, args) => {
-      const updatedVehicle = {
+    updateCar: (parent, args) => {
+      const updatedCar = {
         title: args ? args.title : parent.title,
         info: args ? args.info : parent.info,
       }
-      const vehicleIndex = vehicles.map(vehicle => vehicle.id).indexOf(args.id);
-      vehicles.splice(vehicleIndex, 1, updatedVehicle);
-      return updatedVehicle;
+      const carIndex = cars.map(car => car.id).indexOf(args.id);
+      cars.splice(carIndex, 1, updatedCar);
+      return updatedCar;
     }
   },
 }
