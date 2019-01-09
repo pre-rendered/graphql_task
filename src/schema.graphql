@@ -30,3 +30,7 @@ type Car {
   model: String
   year: Int
 }
+
+type Subscription {
+  newCar: Car
+}
