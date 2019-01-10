@@ -31,6 +31,12 @@ type Car {
   year: Int
 }
 
+type Status {
+  status: Int
+  message: String
+}
+
 type Subscription {
-  newCar: Car
+  newCar: Car,
+  deletedCar: Status
 }
