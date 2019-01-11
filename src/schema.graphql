@@ -6,19 +6,19 @@ type Query {
 type Mutation {
   createCar(
     title: String!,
-    vin: String,
-    make: String,
-    model: String,
-    year: Int
+    vin: String = "",
+    make: String = "",
+    model: String = "",
+    year: Int = 0
   ): Car!
   deleteCar(id: ID!): Car
   updateCar(
     id: ID!,
-    title: String,
-    vin: String,
-    make: String,
-    model: String,
-    year: Int
+    title: String = "",
+    vin: String = "",
+    make: String = "",
+    model: String = "",
+    year: Int = 0
   ): Car
 }
 
